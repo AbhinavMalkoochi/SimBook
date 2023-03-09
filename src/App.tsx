@@ -6,10 +6,11 @@ TODO:
 3. NLP to analyze input data and provide suggestions
 4. Compare input book with database to suggest similar book
 
+ML: input data with five hundred books with outputs containing percentages(or rating 1-10) in various literary categories. 
+- Then predict output of collection of books and attach the categories percentages to the book to compare
 
 */
 
-import DropdownButton from "react-bootstrap/DropdownButton";
 import Dropdown from "react-dropdown";
 import "react-dropdown/style.css";
 

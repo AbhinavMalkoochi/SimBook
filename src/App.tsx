@@ -1,5 +1,4 @@
-import React, { Component } from "react";
-/*
+import React, { useState, Component, useEffect } from "react"; /*
 TODO: 
 1. populate drop-down with all books from API
 2. Collect data with text, reviews, and ratings
@@ -13,23 +12,39 @@ ML: input data with five hundred books with outputs containing percentages(or ra
 
 import Dropdown from "react-dropdown";
 import "react-dropdown/style.css";
+//import { searchBooks } from "../backend/api/dataLoad";
+export default function App() {
+  const [searchInput, setSearchInput] = useState("");
+  const [book, setBook] = useState("");
 
-export default class App extends Component {
-  render() {
-    const options = ["one", "two", "three"];
-
-    return (
-      <div>
-        <main>
-          <section>
-            <Dropdown
-              options={options}
-              value="B"
-              placeholder="Select an option"
-            />
-          </section>
-        </main>
-      </div>
-    );
+  const options = ["one", "two", "three"];
+  const searchBar = () => {};
+  /*
+  const handleChange = (e) => {
+    e.preventDefault();
+    setSearchInput(e.target.value);
+  };
+*/
+  if (searchInput.length > 0) {
+    countries.filter((country) => {
+      return country.name.match(searchInput);
+    });
   }
+  useEffect(() => {
+    // setBook(searchBooks(searchInput));
+  }, []);
+  return (
+    <div>
+      <main>
+        <section>
+          <input
+            type="text"
+            placeholder="Search for books"
+            onChange={handleChange}
+            value={searchInput}
+          />
+        </section>
+      </main>
+    </div>
+  );
 }

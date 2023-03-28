@@ -1,25 +1,44 @@
-import logo from './logo.svg';
-import './App.css';
+/*
+TODO: 
+1. populate drop-down with all books from API
+2. Collect data with text, reviews, and ratings
+3. NLP to analyze input data and provide suggestions
+4. Compare input book with database to suggest similar book
+ML: input data with five hundred books with outputs containing percentages(or rating 1-10) in various literary categories. 
+- Then predict output of collection of books and attach the categories percentages to the book to compare
+*/
+import React, { useState, Component, useEffect } from "react";
+import fetch from "node-fetch";
 
-function App() {
+export default function App() {
+  const [searchInput, setSearchInput] = useState("");
+  const [books, setBooks] = useState([]);
+
+  useEffect(() => {
+    let url = "https://gutendex.com/books?search=The";
+    const fetchData = async () => {
+      try {
+        const response = await fetch(url);
+        const body = await response.json();
+        setBooks(body);
+      } catch (error) {
+        console.log("error", error);
+      }
+    };
+    fetchData();
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <main>
+        <section>
+          <ol>
+            {books.map((book) => (
+              <li>{book}</li>
+            ))}
+          </ol>
+        </section>
+      </main>
     </div>
   );
 }
-
-export default App;

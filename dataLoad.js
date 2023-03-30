@@ -4,8 +4,6 @@
 3. Integrate with Frontend(redux)
  */
 
-import fetch from "node-fetch";
-
 let similarBooks = [{}];
 let similarBooksTemp = [{}];
 let similarBooksOrdered = [{}];
@@ -13,9 +11,16 @@ let similarBooksOrdered = [{}];
 let searchTerm = "The";
 let stringSimilarityPercentage;
 
-const response = await fetch("https://gutendex.com/books?search=The");
-const body = await response.json();
-console.log(body);
+let url = "https://gutendex.com/books?search=The";
+try {
+  fetch(url)
+    .then((response) => response.json())
+    .then((json) => {
+      console.log(json);
+    });
+} catch (error) {
+  console.log("error", error);
+}
 
 /*
 function similarityHandler() {

@@ -8,37 +8,36 @@ ML: input data with five hundred books with outputs containing percentages(or ra
 - Then predict output of collection of books and attach the categories percentages to the book to compare
 */
 import React, { useState, Component, useEffect } from "react";
-import fetch from "node-fetch";
 
 export default function App() {
   const [searchInput, setSearchInput] = useState("");
   const [books, setBooks] = useState([]);
 
   useEffect(() => {
-    let url = "https://gutendex.com/books?search=The";
+    let url = "https://gutendex.com/books/?page=2";
     const fetchData = async () => {
       try {
         const response = await fetch(url);
-        const body = await response.json();
-        setBooks(body);
+        const data = await response.json();
+        setBooks(data.results);
+        console.log(books);
       } catch (error) {
-        console.log("error", error);
+        console.log(error);
       }
     };
     fetchData();
   }, []);
-
   return (
     <div>
-      <main>
-        <section>
-          <ol>
-            {books.map((book) => (
-              <li>{book}</li>
-            ))}
-          </ol>
-        </section>
-      </main>
+      {books.length > 0 && (
+        <ul>
+          {books.map((user) => (
+            <div>
+              <ol>{user.title}</ol>
+            </div>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }

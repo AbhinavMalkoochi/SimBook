@@ -8,11 +8,20 @@ ML: input data with five hundred books with outputs containing percentages(or ra
 - Then predict output of collection of books and attach the categories percentages to the book to compare
 */
 import React, { useState, Component, useEffect } from "react";
+import ReactSearchBox from "react-search-box";
+import AsyncSelect from "react-select/async";
 
+import Select from "react-select";
+import { isModuleNamespaceObject } from "util/types";
 export default function App() {
   const [searchInput, setSearchInput] = useState("");
   const [books, setBooks] = useState([]);
+  const [bookTitle, setBookTitle] = useState([]);
+  const [selectedBook, setSelectedBook] = useState();
 
+  function selectBook(book) {
+    setSelectedBook(book);
+  }
   useEffect(() => {
     let url = "https://gutendex.com/books/?page=2";
     const fetchData = async () => {
@@ -20,23 +29,32 @@ export default function App() {
         const response = await fetch(url);
         const data = await response.json();
         setBooks(data.results);
-        console.log(books);
+        // console.log(data.results);
       } catch (error) {
         console.log(error);
       }
     };
+    const filterData = async () => {
+      let selectBooks = books.map(function (book) {
+        return book.title;
+      });
+      let modSelBook;
+      selectBooks.forEach(function (book) {
+        modSelBook.push({ label: book, value: book });
+      });
+      console.log(modSelBook);
+      setBookTitle(modSelBook);
+    };
     fetchData();
+    filterData();
   }, []);
+
   return (
     <div>
-      {books.length > 0 && (
-        <ul>
-          {books.map((user) => (
-            <div>
-              <ol>{user.title}</ol>
-            </div>
-          ))}
-        </ul>
+      {bookTitle.length > 0 && (
+        <div>
+          <AsyncSelect options={bookTitle} />
+        </div>
       )}
     </div>
   );

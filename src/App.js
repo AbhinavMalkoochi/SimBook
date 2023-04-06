@@ -10,50 +10,81 @@ ML: input data with five hundred books with outputs containing percentages(or ra
 import React, { useState, Component, useEffect } from "react";
 import ReactSearchBox from "react-search-box";
 import AsyncSelect from "react-select/async";
-
+import Async, { useAsync } from "react-select/async";
 import Select from "react-select";
-import { isModuleNamespaceObject } from "util/types";
+
 export default function App() {
   const [searchInput, setSearchInput] = useState("");
   const [books, setBooks] = useState([]);
-  const [bookTitle, setBookTitle] = useState([]);
+  const [bookTitle, setBookTitle] = useState([{}]);
   const [selectedBook, setSelectedBook] = useState();
-
-  function selectBook(book) {
-    setSelectedBook(book);
-  }
+  /*
   useEffect(() => {
-    let url = "https://gutendex.com/books/?page=2";
+    let dataResult = [];
+
     const fetchData = async () => {
       try {
+        let url = "https://gutendex.com/books/?page=4";
         const response = await fetch(url);
         const data = await response.json();
-        setBooks(data.results);
-        // console.log(data.results);
+        dataResult = data.results;
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
-    };
-    const filterData = async () => {
-      let selectBooks = books.map(function (book) {
+
+      let selectBooks = dataResult.map(function (book) {
         return book.title;
       });
-      let modSelBook;
+
+      let modSelBook = [];
       selectBooks.forEach(function (book) {
         modSelBook.push({ label: book, value: book });
       });
-      console.log(modSelBook);
-      setBookTitle(modSelBook);
-    };
-    fetchData();
-    filterData();
-  }, []);
 
+      setBookTitle(modSelBook);
+      return modSelBook;
+    };
+
+    fetchData();
+  }, []);*/
+  const searchBooksHandler = async () => {
+    let dataResult = [];
+    try {
+      let url = `https://gutendex.com/books?search=${searchInput}`;
+      const response = await fetch(url);
+      const data = await response.json();
+      dataResult = data.results;
+      //console.log(dataResult);
+    } catch (error) {
+      //console.log(error);
+    }
+    let selectBooks = dataResult.map(function (book) {
+      return book.title;
+    });
+    console.log(selectBooks);
+    let modSelBook = [];
+    selectBooks.forEach(function (book) {
+      modSelBook.push({ label: book, value: book });
+    });
+    //console.log("this is a test ");
+    console.log(modSelBook);
+    setBooks(modSelBook);
+    return modSelBook;
+  };
+
+  const loadOptions = async () => {
+    const filteredBooks = await searchBooksHandler();
+    return filteredBooks;
+  };
   return (
     <div>
       {bookTitle.length > 0 && (
         <div>
-          <AsyncSelect options={bookTitle} />
+          <AsyncSelect
+            defaultOptions
+            loadOptions={loadOptions}
+            onInputChange={(value) => setSearchInput(value)}
+          />
         </div>
       )}
     </div>
